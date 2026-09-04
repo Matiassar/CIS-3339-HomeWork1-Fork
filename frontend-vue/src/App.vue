@@ -1,11 +1,24 @@
-<script setup></script>
+<script setup>
+import {RouterLink, RouterView} from 'vue-router'
+</script>
 
 <template>
-  <h1>You did it!</h1>
-  <p>
-    Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
-    documentation
-  </p>
+  <header>
+    <nav>
+      <router-link to="/courses">Courses</router-link>
+      <router-link to="/enrollments">Enrollments</router-link>
+      <router-link to="/students">Students</router-link>
+    </nav>
+  </header>
+  <main>
+    <router-view />
+  </main>
 </template>
 
-<style scoped></style>
+<style scoped>
+  nav {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+  }
+</style>
