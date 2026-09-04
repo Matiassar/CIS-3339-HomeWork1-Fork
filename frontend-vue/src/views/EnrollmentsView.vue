@@ -114,6 +114,13 @@ form {
   max-width: 300px;
 }
 
+section > label{
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  max-width: 300px;
+}
+
 label {
   display: flex;
   flex-direction: column;
