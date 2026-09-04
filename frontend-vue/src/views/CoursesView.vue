@@ -98,19 +98,3 @@ async function handleDelete(courseId) {
     </div>
   </div>
 </template>
-
-
-<style scoped>
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    max-width: 300px;
-  }
-
-  label {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-</style>
