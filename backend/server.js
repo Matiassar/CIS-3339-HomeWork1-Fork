@@ -1,4 +1,5 @@
 require('dotenv').config();
+const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
@@ -9,6 +10,7 @@ const Enrollment = require('./models/Enrollment');
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(express.static(path.join(__dirname, '../frontend-vue/dist')));
 
 mongoose.connect(process.env.MONGODB_URI)
     .then(() => console.log('Connected to MongoDB'))
@@ -183,6 +185,11 @@ app.get('/enrollments/:courseId', async (req, res) => {
         console.error('Error listing students for course:', error);
         res.status(500).send({ error: 'Internal server error' });
     }
+});
+
+
+app.use((req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend-vue/dist/index.html'));
 });
 
 
