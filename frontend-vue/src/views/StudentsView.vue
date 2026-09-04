@@ -65,68 +65,81 @@ async function handleDelete(studentName) {
 
 <template>
   <div>
-    <h1>Students</h1>
+    <h1 class="mb-4">Students</h1>
 
-    <section>
-      <h2>Search Student</h2>
-      <form @submit.prevent="handleSearch">
-        <label>
-          Name
-          <input v-model="searchName" type="text" />
-        </label>
-        <button type="submit" :disabled="store.loading">Search</button>
-      </form>
+    <div class="row g-4">
+      <div class="col-md-5">
+        <div class="card">
+          <div class="card-body">
+            <h2 class="h5 card-title">Add Student</h2>
+            <form @submit.prevent="handleAddStudent">
+              <div class="mb-3">
+                <label class="form-label">Name</label>
+                <input v-model="name" type="text" class="form-control" />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Student ID</label>
+                <input v-model="id" type="text" class="form-control" />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Phone</label>
+                <input v-model="phone" type="text" class="form-control" />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">ZIP Code</label>
+                <input v-model="zip" type="text" class="form-control" />
+              </div>
+              <button type="submit" class="btn btn-primary" :disabled="store.loading">
+                Add Student
+              </button>
+            </form>
+            <div v-if="formMessage" class="alert alert-info mt-3 mb-0">{{ formMessage }}</div>
+          </div>
+        </div>
+      </div>
 
-      <p v-if="searchMessage">{{searchMessage}}</p>
+      <div class="col-md-7">
+        <div class="card">
+          <div class="card-body">
+            <h2 class="h5 card-title">Search Student</h2>
+            <form @submit.prevent="handleSearch" class="d-flex gap-2 mb-3">
+              <input v-model="searchName" type="text" class="form-control" placeholder="Student name" />
+              <button type="submit" class="btn btn-primary" :disabled="store.loading">Search</button>
+            </form>
 
-      <table v-if="searchResult" border="1">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>ID</th>
-            <th>Phone</th>
-            <th>ZIP Code</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{{ searchResult.name }}</td>
-            <td>{{ searchResult.id }}</td>
-            <td>{{ searchResult.phone }}</td>
-            <td>{{ searchResult.zip }}</td>
-            <td><button @click="handleDelete(searchResult.name)" :disabled="store.loading">Delete</button></td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
+            <div v-if="searchMessage" class="alert alert-warning mb-0">{{ searchMessage }}</div>
 
-    <section>
-      <h2>Add Student</h2>
-      <form @submit.prevent="handleAddStudent">
-        <label>
-          Name
-          <input v-model="name" type="text" />
-        </label>
-        <label>
-          Student ID
-          <input v-model="id" type="text" />
-        </label>
-        <label>
-          Phone
-          <input v-model="phone" type="text" />
-        </label>
-        <label>
-          ZIP Code
-          <input v-model="zip" type="text" />
-        </label>
-        <button type="submit" :disabled="store.loading">Add Student</button>
-      </form>
-      <p v-if="formMessage">{{ formMessage }}</p>
-    </section>
-
+            <table v-if="searchResult" class="table table-striped mt-3 mb-0">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>ID</th>
+                  <th>Phone</th>
+                  <th>Zip</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{ searchResult.name }}</td>
+                  <td>{{ searchResult.id }}</td>
+                  <td>{{ searchResult.phone }}</td>
+                  <td>{{ searchResult.zip }}</td>
+                  <td>
+                    <button class="btn btn-sm btn-danger" @click="handleDelete(searchResult.name)">
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
+
 
 <style scoped>
     form {

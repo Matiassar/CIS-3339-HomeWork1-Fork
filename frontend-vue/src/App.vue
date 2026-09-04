@@ -3,17 +3,22 @@ import {RouterLink, RouterView} from 'vue-router'
 </script>
 
 <template>
-  <header>
-    <nav>
-      <router-link to="/courses">Courses</router-link>
-      <router-link to="/enrollments">Enrollments</router-link>
-      <router-link to="/students">Students</router-link>
-    </nav>
-  </header>
-  <main>
-    <router-view />
+  <nav class="navbar navbar-expand navbar-dark bg-dark">
+    <div class="container">
+      <span class="navbar-brand">Student Management</span>
+      <div class="navbar-nav">
+        <RouterLink to="/courses" class="nav-link" active-class="active">Courses</RouterLink>
+        <RouterLink to="/enrollments" class="nav-link" active-class="active">Enrollments</RouterLink>
+        <RouterLink to="/students" class="nav-link" active-class="active">Students</RouterLink>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container py-4">
+    <RouterView />
   </main>
 </template>
+
 
 <style scoped>
   nav {
