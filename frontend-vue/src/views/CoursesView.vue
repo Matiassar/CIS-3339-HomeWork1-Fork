@@ -40,47 +40,65 @@ async function handleDelete(courseId) {
 
 <template>
   <div>
-    <h1>Courses</h1>
+    <h1 class="mb-4">Courses</h1>
 
-    <section>
-      <h2>Add Course</h2>
-      <form @submit.prevent="handleAddCourse">
-        <label>
-          Course ID
-          <input v-model="id" type="text" />
-        </label>
-        <label>
-          Course Name
-          <input v-model="name" type="text" />
-        </label>
-        <button type="submit" :disabled="coursesStore.loading">Add Course</button>
-      </form>
-      <p v-if="formMessage">{{ formMessage }}</p>
-    </section>
+    <div class="row g-4">
+      <div class="col-md-5">
+        <div class="card">
+          <div class="card-body">
+            <h2 class="h5 card-title">Add Course</h2>
+            <form @submit.prevent="handleAddCourse">
+              <div class="mb-3">
+                <label class="form-label">Course ID</label>
+                <input v-model="id" type="text" class="form-control" />
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Course Name</label>
+                <input v-model="name" type="text" class="form-control" />
+              </div>
+              <button type="submit" class="btn btn-primary" :disabled="coursesStore.loading">
+                Add Course
+              </button>
+            </form>
+            <div v-if="formMessage" class="alert alert-info mt-3 mb-0">{{ formMessage }}</div>
+          </div>
+        </div>
+      </div>
 
-    <section>
-      <h2>All Courses</h2>
-      <p v-if="coursesStore.loading">Loading courses...</p>
-      <p v-else-if="coursesStore.courses.length === 0">No courses available.</p>
-      <table v-else border="1">
-        <thead>
-          <tr>
-            <th>Course ID</th>
-            <th>Course Name</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="course in coursesStore.courses" :key="course.id">
-            <td>{{ course.id }}</td>
-            <td>{{ course.name }}</td>
-            <td><button @click="handleDelete(course.id)">Delete</button></td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
+      <div class="col-md-7">
+        <div class="card">
+          <div class="card-body">
+            <h2 class="h5 card-title">All Courses</h2>
+
+            <p v-if="coursesStore.loading" class="text-muted mb-0">Loading courses...</p>
+            <p v-else-if="coursesStore.courses.length === 0" class="text-muted mb-0">No courses available.</p>
+            <table v-else class="table table-striped mb-0">
+              <thead>
+                <tr>
+                  <th>Course ID</th>
+                  <th>Course Name</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="course in coursesStore.courses" :key="course.id">
+                  <td>{{ course.id }}</td>
+                  <td>{{ course.name }}</td>
+                  <td>
+                    <button class="btn btn-sm btn-danger" @click="handleDelete(course.id)">
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
+
 
 <style scoped>
   form {
