@@ -77,15 +77,28 @@ async function handleDelete(studentName) {
         <button type="submit" :disabled="store.loading">Search</button>
       </form>
 
-      <p v-if="searchMessage">{{ searchMessage }}</p>
+      <p v-if="searchMessage">{{searchMessage}}</p>
 
-      <div v-if="searchResult">
-        <p>Name: {{ searchResult.name }}</p>
-        <p>ID: {{ searchResult.id }}</p>
-        <p>Phone: {{ searchResult.phone }}</p>
-        <p>ZIP: {{ searchResult.zip }}</p>
-        <button @click="handleDelete(searchResult.name)">Delete</button>
-      </div>
+      <table v-if="searchResult" border="1">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>ID</th>
+            <th>Phone</th>
+            <th>ZIP Code</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ searchResult.name }}</td>
+            <td>{{ searchResult.id }}</td>
+            <td>{{ searchResult.phone }}</td>
+            <td>{{ searchResult.zip }}</td>
+            <td><button @click="handleDelete(searchResult.name)" :disabled="store.loading">Delete</button></td>
+          </tr>
+        </tbody>
+      </table>
     </section>
 
     <section>
