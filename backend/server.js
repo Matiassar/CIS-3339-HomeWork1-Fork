@@ -172,7 +172,7 @@ app.post('/enroll', async (req, res) => {
 });
 
 //Endpoint to list students enrolled in a course
-app.get('/course-students/:courseId', async (req, res) => {
+app.get('/enrollments/:courseId', async (req, res) => {
     try {
         const { courseId } = req.params;
         const enrollments = await Enrollment.find({ courseId });
