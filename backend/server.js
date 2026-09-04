@@ -73,6 +73,58 @@ app.post('/delete-student', async (req, res) => {
     }
 });
 
+//Endpoint to list all courses
+app.get('/courses', async (req, res) => {
+    try {
+        const courses = await Course.find();
+        res.send(courses);
+    } catch (error) {
+        console.error('Error listing courses:', error);
+        res.status(500).send({ error: 'Internal server error' });
+    }
+});
+
+//Endpoint to add a course
+app.post('/add-course', async (req, res) => {
+    try {
+        const { id, name } = req.body;
+        if (!id || !name) {
+            return res.status(400).send({ error: 'Both fields (id, name)' });
+        }
+
+        const existing = await Course.findOne({ id });
+        if (existing) {
+            return res.status(409).send({ error: 'A course with that ID already exists' });
+        }
+
+        const newCourse = await Course.create({ id, name });
+        res.status(201).send({ message: 'Course added successfully', course: newCourse });
+    } catch (error) {
+        console.error('Error adding course:', error);
+        res.status(500).send({ error: 'Internal server error' });
+    }
+});
+
+//Endpoint to delete a course by id
+app.post('/delete-course', async (req, res) => {
+    try {
+        const { id } = req.body;
+        if (!id) {
+            return res.status(400).send({ error: 'Course id is required' });
+        }
+
+        const deletedCourse = await Course.findOneAndDelete({ id });
+        if (!deletedCourse) {
+            return res.status(404).send({ error: 'Course not found' });
+        }
+
+        res.send({ message: 'Course deleted successfully', course: deletedCourse });
+    } catch (error) {
+        console.error('Error deleting course:', error);
+        res.status(500).send({ error: 'Internal server error' });
+    }
+});
+
 // Start the server
 const PORT = 3000;
 app.listen(PORT, () => {
