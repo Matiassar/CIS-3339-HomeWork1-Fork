@@ -4,6 +4,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const Student = require('./models/Student');
 const Course = require('./models/Course');
+const Enrollment = require('./models/Enrollment');
 
 const app = express();
 app.use(cors());
@@ -66,6 +67,7 @@ app.post('/delete-student', async (req, res) => {
         if (!deletedStudent) {
             return res.status(404).send({ error: 'Student not found' });
         }
+        await Enrollment.deleteMany({ studentId: deletedStudent.id });
 
         res.send({ message: 'Student deleted successfully', student: deletedStudent });
     } catch (error) {
@@ -118,6 +120,7 @@ app.post('/delete-course', async (req, res) => {
         if (!deletedCourse) {
             return res.status(404).send({ error: 'Course not found' });
         }
+        await Enrollment.deleteMany({ courseId: deletedCourse.id });
 
         res.send({ message: 'Course deleted successfully', course: deletedCourse });
     } catch (error) {
@@ -125,6 +128,63 @@ app.post('/delete-course', async (req, res) => {
         res.status(500).send({ error: 'Internal server error' });
     }
 });
+
+//Endpoint to list all students
+app.get('/students', async (req, res) => {
+    try {
+        const students = await Student.find();
+        res.send(students);
+    } catch (error) {
+        console.error('Error listing students:', error);
+        res.status(500).send({ error: 'Internal server error' });
+    }
+});
+
+//Endpoint to enroll a student in a course
+app.post('/enroll', async (req, res) => {
+    try {
+        const { studentId, courseId } = req.body;
+        if (!studentId || !courseId) {
+            return res.status(400).send({ error: 'Both fields (studentId, courseId) are required' });
+        }
+
+        const student = await Student.findOne({ id: studentId });
+        if (!student) {
+            return res.status(404).send({ error: 'Student not found' });
+        }
+
+        const course = await Course.findOne({ id: courseId });
+        if (!course) {
+            return res.status(404).send({ error: 'Course not found' });
+        }
+
+        const existingEnrollment = await Enrollment.findOne({ studentId, courseId });
+        if (existingEnrollment) {
+            return res.status(409).send({ error: 'Student is already enrolled in this course' });
+        }
+
+        const newEnrollment = await Enrollment.create({ studentId, courseId });
+        res.status(201).send({ message: 'Enrollment successful', enrollment: newEnrollment });
+    } catch (error) {
+        console.error('Error enrolling student:', error);
+        res.status(500).send({ error: 'Internal server error' });
+    }
+});
+
+//Endpoint to list students enrolled in a course
+app.get('/course-students/:courseId', async (req, res) => {
+    try {
+        const { courseId } = req.params;
+        const enrollments = await Enrollment.find({ courseId });
+        const studentIds = enrollments.map(enrollment => enrollment.studentId);
+        const students = await Student.find({ id: { $in: studentIds } });
+        res.send(students);
+    } catch (error) {
+        console.error('Error listing students for course:', error);
+        res.status(500).send({ error: 'Internal server error' });
+    }
+});
+
 
 // Start the server
 const PORT = 3000;
