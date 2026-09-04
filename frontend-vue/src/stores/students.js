@@ -84,5 +84,23 @@ export const useStudentsStore = defineStore('students', () => {
         }
     }
 
-  return { students, loading, error, findStudent, addStudent, deleteStudent }
+    async function fetchStudents() {
+        loading.value = true
+        error.value = ''
+        try {
+            const response = await fetch(`${API_BASE}/students`)
+            const data = await response.json()
+            if (!response.ok) {
+                error.value = data.error || 'Unable to load students'
+                return
+            }
+            students.value = data
+        } catch (err) {
+            error.value = err.message || 'unable to reach the server'
+        } finally {
+            loading.value = false
+        }
+    }
+
+  return { students, loading, error, findStudent, addStudent, deleteStudent, fetchStudents }
 })
